@@ -18,8 +18,14 @@ module.exports = function(req){
     });
 
     req.on('end', () => {
-      req.body = JSON.parse(body);
-      resolve(req);
+      try{
+        req.body = JSON.parse(body);
+        resolve(req);
+      }
+      catch(err){
+        console.error(err);
+        reject(err);        
+      }
     });
 
   });
