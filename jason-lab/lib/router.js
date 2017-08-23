@@ -8,7 +8,7 @@ const Router = module.exports = function(){
     GET:{},
     POST:{},
     PUT:{},
-    DELETE:{}''
+    DELETE:{}
   };
 };
 
