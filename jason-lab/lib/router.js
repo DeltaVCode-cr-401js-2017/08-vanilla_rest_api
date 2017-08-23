@@ -7,6 +7,8 @@ const Router = module.exports = function(){
   this.routes = {
     GET:{},
     POST:{},
+    PUT:{},
+    DELETE:{}''
   };
 };
 
@@ -15,6 +17,12 @@ Router.prototype.get = function(path, callback){
 };
 Router.prototype.post = function(path, callback){
   this.routes.POST[path] = callback;
+};
+Router.prototype.put = function(path, callback){
+  this.routes.PUT[path] = callback;
+};
+Router.prototype.delete = function(path, callback){
+  this.routes.DELETE[path] = callback;
 };
 
 Router.prototype.route = function(){
