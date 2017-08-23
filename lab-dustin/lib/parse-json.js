@@ -2,7 +2,6 @@
 
 module.exports = function(req){
   if (req.method !== 'POST' && req.method !== 'PUT'){
-    console.log('////////////////////////////////////////////////',req);
     return Promise.resolve(req);
   }
 

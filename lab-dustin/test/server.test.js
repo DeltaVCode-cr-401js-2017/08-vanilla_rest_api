@@ -46,4 +46,13 @@ describe('Simple Resource',function(){
       done();
     });
   });
+
+  it('should return a bad request when not given an id in url query',function(done){
+    request
+      .get('/note')
+      .expect(400)
+      .expect({'content-type': 'text/plain'})
+      .expect('Bad Request');
+    done();
+  });
 });

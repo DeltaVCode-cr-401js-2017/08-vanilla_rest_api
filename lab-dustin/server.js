@@ -25,6 +25,15 @@ router.post('/note',(req,res) => {
   res.end();
 });
 
+router.get('/note',(req,res) => {
+  if (req.url.query.id){
+    res.writeHead(400,
+      {'content-type': 'text/plain'});
+  }
+  res.write('Bad Request');
+  return res.end();
+});
+
 const server = http.createServer(router.route());
 
 if (!module.parent){
