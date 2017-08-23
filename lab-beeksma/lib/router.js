@@ -18,7 +18,9 @@ Router.prototype.route = function(){
       res.end();
     })
     .catch(err => {
-      res.writeHead(500);
+      res.writeHead(400, {
+        'Content-Type': 'text/plain'
+      });
       res.write(err.message);
       res.end();
     });
