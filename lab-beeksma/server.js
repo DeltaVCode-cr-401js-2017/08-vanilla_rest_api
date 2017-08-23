@@ -8,6 +8,11 @@ const router = new Router();
 
 const server = http.createServer(router.route());
 
-server.listen(PORT, () => {
-  console.log(`Listening on ${PORT}...`);
-});
+if(!module.parent){
+  server.listen(PORT, () => {
+    console.log(`Listening on ${PORT}...`);
+  });
+}
+
+
+module.exports = server;
