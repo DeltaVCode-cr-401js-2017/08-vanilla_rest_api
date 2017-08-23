@@ -2,6 +2,7 @@
 
 module.exports = function(req){
   if (req.method !== 'POST' && req.method !== 'PUT'){
+    console.log('////////////////////////////////////////////////',req);
     return Promise.resolve(req);
   }
 
@@ -14,7 +15,6 @@ module.exports = function(req){
     req.on('data', function(data){
       body += data.toString();
     });
-
     req.on('error', function(err){
       console.log(err);
       reject(err);
@@ -24,6 +24,7 @@ module.exports = function(req){
       try{
         req.body = JSON.parse(body);
         resolve(req);
+        console.log('request body',req.body);
       } catch (err){
         console.log(err);
         reject(err);

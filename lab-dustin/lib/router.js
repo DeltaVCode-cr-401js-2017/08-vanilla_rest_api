@@ -4,24 +4,48 @@ const parseUrl = require('./parse-url');
 const parseJSON = require('./parse-json');
 
 const Router = module.exports = function(){
+  this.routes = {
+    GET: {},
+    POST: {}
+  };
+};
 
+Router.prototype.get = function(path,callback){
+  this.routes.GET[path] = callback;
+};
+Router.prototype.post = function(path,callback){
+  this.routes.POST[path] = callback;
 };
 
 Router.prototype.route = function(){
-  return function(req,res){
+  console.log('routes: ',this.routes);
+
+  return (req,res) => {
     Promise.all([
       parseUrl(req),
       parseJSON(req)
     ])
     .then(() => {
-      console.log(req.method,req.url);
+      console.log(req.method,req.url.href);
+      let methodRoutes = this.routes[req.method];
+      console.log(methodRoutes);
+      if (!methodRoutes) throw new Error(`I don't speak ${req.method}`);
 
-      res.write('Routed');
+      let pathCallback = methodRoutes[req.url.pathname];
+      console.log(pathCallback);
+      if (pathCallback) return pathCallback(req,res);
+
+      res.writeHead(
+        404,
+        {'content-type': 'text/plain'}
+      );
+      res.write('Not Found');
       res.end();
     })
     .catch(err => {
+      console.log(err);
       res.writeHead(
-        500,
+        400,
         {'content-type': 'text/plain'}
       );
       res.write(err.message);
