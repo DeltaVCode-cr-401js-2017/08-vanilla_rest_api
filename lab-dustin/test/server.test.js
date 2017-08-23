@@ -1,20 +1,20 @@
 'use strict';
 
-const request = require('superagent');
+const app = require('../server');
+const request = require('supertest')(app);
 const { expect } = require('chai');
-
-require('../server');
 
 describe('GET /', function(){
   it('should return routed', function(done){
-    request.get('localhost:3000/')
+    request
+    .get('/')
+      .expect(200)
+      .expect('Routed')
       .end((err,res) => {
         if (err) return done(err);
 
-        expect(res.status).to.equal(200);
-        expect(res.text).to.equal('Routed');
-        done();
 
+        done();
       });
   });
 });
