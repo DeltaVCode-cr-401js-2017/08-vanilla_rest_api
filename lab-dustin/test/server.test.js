@@ -2,7 +2,7 @@
 
 const app = require('../server');
 const request = require('supertest')(app);
-//const { expect } = require('chai');
+const { expect } = require('chai');
 
 describe('GET /', function(){
   it('should return routed', function(done){
@@ -38,21 +38,42 @@ describe('Simple Resource',function(){
     it('should save the body',function(done){
       request
         .post('/note')
+        .send({note: 'this is a note'})
         .expect(200)
         .expect(res => {
-          expect(res.note.body).to.be.equal('this is a note');
-          expect(res.note.id).to.not.be.empty;
-        });
+          expect(res.body.note).to.equal('this is a note');
+          expect(res.body.id).to.not.be.empty;
+        })
+        .end(done);
+    });
+  });
+  describe('GET /note', function(){
+    it('should return a bad request when not given an id in url query',function(done){
+      request
+        .get('/note')
+        .expect(400)
+        .expect({'content-type': 'text/plain'})
+        .expect('Bad Request');
+      done();
+    });
+
+    it('should return not found if the note does not exist',function(done){
+      request
+        .get('/note?id=1')
+        .expect(404)
+        .expect({'content-type': 'text/plain'})
+        .expect('Not Found');
+      done();
+    });
+
+    it('should return the note if the id is valid',function(done){
+      request
+        .get('/note?id=2')
+        .expect(200)
+        .expect({'content-type': 'text/plain'})
+        .expect('OK');
       done();
     });
   });
 
-  it('should return a bad request when not given an id in url query',function(done){
-    request
-      .get('/note')
-      .expect(400)
-      .expect({'content-type': 'text/plain'})
-      .expect('Bad Request');
-    done();
-  });
 });

@@ -14,24 +14,37 @@ router.get('/', function(req,res){
   res.end();
 });
 
+const storage = {};
+
 router.post('/note',(req,res) => {
-  const note = Object.assign({
+  let note = Object.assign({
     id: uuid.v1(),
   },req.body);
-
+  storage[note.id] = note;
   console.log('note ',note);
-  res.writeHead(200,{'content-type': 'text/plain'});
+  res.writeHead(200,{'content-type': 'application/json'});
   res.write(JSON.stringify(note));
+  //storage.createItem()
   res.end();
 });
 
 router.get('/note',(req,res) => {
-  if (req.url.query.id){
+  //storage.fetchItem();
+  console.log(storage[req.url.query.id]);
+  if (!req.url.query.id){
     res.writeHead(400,
       {'content-type': 'text/plain'});
+    res.write('Bad Request');
+    return res.end();
   }
-  res.write('Bad Request');
-  return res.end();
+  if (!storage[req.url.query.id]){
+    console.log(`Note ${req.url.query.id} does not exist.`);
+    res.writeHead(404,
+      {'content-type': 'text/plain'}
+    );
+    res.write('Not Found');
+    res.end();
+  }
 });
 
 const server = http.createServer(router.route());
