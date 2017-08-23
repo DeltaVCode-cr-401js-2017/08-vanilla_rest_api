@@ -10,9 +10,18 @@ const Router = module.exports = function(){
 
 Router.prototype.route = function(){
   return(req,res) =>{
-    console.log(req.method, req.url);
+    parseURL(req)
+    .then(() =>{
+      console.log(req.method, req.url);
 
-    res.write('routed');
-    res.end();
+      res.write('routed');
+      res.end();
+    })
+    .catch(err => {
+      res.writeHead(500);
+      res.write(err.message);
+      res.end();
+    });
+
   };
 };
