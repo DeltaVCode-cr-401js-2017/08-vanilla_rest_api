@@ -1,7 +1,7 @@
 'use strict';
 
 const parseURL = require('./parse-url');
-const parseJSON = require('./parse-json')
+const parseJSON = require('./parse-json');
 
 const Router = module.exports = function(){
 
@@ -10,10 +10,13 @@ const Router = module.exports = function(){
 
 Router.prototype.route = function(){
   return(req,res) =>{
-    parseURL(req)
+    Promise.all([
+      parseURL(req)
+      ,parseJSON(req)
+    ])
     .then(() =>{
       console.log(req.method, req.url);
-
+      console.log('body', req.body);
       res.write('routed');
       res.end();
     })
