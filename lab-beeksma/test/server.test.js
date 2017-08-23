@@ -9,13 +9,12 @@ const { expect } = require('chai');
 describe('GET /', function (){
   it('should return routed', function (done){
     request.get('/')
-      .end((err,res) => {
-        if(err) return done(err);
-
-        expect(res.status).to.equal(200);
-        expect(res.text).to.equal('routed');
-        console.log(res);
-        done();
-      });
+    .expect(200)
+    .expect('routed')
+    .expect('content-type', 'text/plain')
+    .expect(res => {
+      expect(res.files).to.be.undefined;
+    })
+    .end(done);
   });
 });

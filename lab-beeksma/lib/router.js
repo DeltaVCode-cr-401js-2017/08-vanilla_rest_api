@@ -17,6 +17,9 @@ Router.prototype.route = function(){
     .then(() =>{
       console.log(req.method, req.url);
       console.log('body', req.body);
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
       res.write('routed');
       res.end();
     })
