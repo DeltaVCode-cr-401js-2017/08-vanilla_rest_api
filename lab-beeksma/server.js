@@ -61,6 +61,23 @@ router.get('/note', (req, res) =>{
   });
 });
 
+router.delete('/note', (req, res) =>{
+  storage.removeItem(req.url.pathname, req.url.query.id)
+  .then(() => {
+    res.writeHead(204, {
+      'Content-Type': 'text/plain'
+    });
+    res.end();
+  })
+  .catch(err =>{
+    res.writeHead(400, {
+      'Content-Type': 'text/plain'
+    });
+    res.write(`Bad Request : ${err}`);
+    res.end();
+  });
+});
+
 const server = http.createServer(router.route());
 
 

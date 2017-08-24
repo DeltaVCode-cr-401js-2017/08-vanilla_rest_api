@@ -105,7 +105,7 @@ describe('Simple Resource', function (){
 
   describe('DELETE /note', function (){
     it('should return bad request if no ID sent', function (done){
-      request.get(`/note`)
+      request.delete(`/note`)
       .expect(400)
       .expect('Bad Request : Error: expected id')
       .expect('content-type', 'text/plain')
@@ -113,10 +113,10 @@ describe('Simple Resource', function (){
     });
 
     it('should return a 204 status with nothing in body if ID supplied', function (done){
-      request.get(`/note?id=${note.id}`)
+      request.delete(`/note?id=${note.id}`)
       .expect(204)
       .expect(res => {
-        expect(res.body).to.be.null;
+        expect(res.body).to.be.empty;
       })
       .end(done);
     });
