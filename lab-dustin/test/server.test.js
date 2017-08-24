@@ -50,8 +50,16 @@ describe('Simple Resource',function(){
     });
     it('should return bad request if there was no body or if the request was invalid',function(done){
       request.post('/note')
+        .send()
         .expect(400)
-        .expect('Bad Request: No Body')
+        .expect('Bad Request')
+        .end(done);
+    });
+    it('should return bad request if given invalid body',function(done){
+      request.post('/note')
+        .send('invalid body')
+        .expect(400)
+        .expect('Bad Request')
         .end(done);
     });
   });

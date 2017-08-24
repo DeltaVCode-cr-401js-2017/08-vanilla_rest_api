@@ -17,9 +17,10 @@ router.get('/', function(req,res){
 const storage = {};
 
 router.post('/note',(req,res) => {
+  console.log('REQUEST BODY: ',req.body);
   if (!req.body) {
     res.writeHead(400);
-    res.write('Bad Request: No Body');
+    res.write('Bad Request');
     return res.end();
   }
   try {
