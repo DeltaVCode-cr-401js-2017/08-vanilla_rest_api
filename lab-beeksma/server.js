@@ -19,9 +19,12 @@ router.get('/', function(req,res){
 });
 
 router.post('/note', (req,res) =>{
-  let note = Object.assign ({
-    id: uuid.v1(),
-  }, req.body);
+  var note;
+  if(req.body){
+    note = Object.assign ({
+      id: uuid.v1(),
+    }, req.body);
+  }
   storage.createItem(req.url.pathname, note)
     .then((item) => {
       console.log(item);
@@ -29,6 +32,13 @@ router.post('/note', (req,res) =>{
         'Content-Type': 'application/json'
       });
       res.write(JSON.stringify(item));
+      res.end();
+    })
+    .catch(err => {
+      res.writeHead(400, {
+        'Content-Type': 'text/plain'
+      });
+      res.write(`Bad Request : ${err}`);
       res.end();
     });
 });
