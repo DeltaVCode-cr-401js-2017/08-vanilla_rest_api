@@ -57,7 +57,7 @@ describe('Simple Resource',function(){
     });
     it('should return bad request if given invalid body',function(done){
       request.post('/note')
-        .send('invalid body')
+        .send('{json: "this is not json"}')
         .expect(400)
         .expect('Bad Request')
         .end(done);
@@ -73,7 +73,6 @@ describe('Simple Resource',function(){
         .expect('Bad Request')
         .end(done);
     });
-
     it('should return not found if the note does not exist',function(done){
       request
         .get('/note?id=1')
@@ -82,7 +81,6 @@ describe('Simple Resource',function(){
         .expect('Not Found')
         .end(done);
     });
-
     it('should return the note if the id is valid',function(done){
       console.log(note);
       request
@@ -96,4 +94,11 @@ describe('Simple Resource',function(){
     });
   });
 
+  describe('DELETE /note',function(){
+    it('should return 204 OK if it deleted the note',function(done){
+      request.delete(`/note?id=${note.id}`)
+      .expect(204)
+      .end(done);
+    });
+  });
 });
