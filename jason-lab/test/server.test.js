@@ -20,28 +20,29 @@ describe('ROUTES', function (){
   });
 });
 
-describe('POST /api/dead', function() {
+describe('All /api/dead', function() {
   var character = null;
-  it('should save body', function (done) {
-    request.post('/api/dead')
-      .send({ name: 'Robert Baratheon', dead: 'yes' })
-      .expect(200)
-      .expect(res => {
-        expect(res.body.name).to.equal('Robert Baratheon');
-        expect(res.body.dead).to.equal('yes');
-        expect(res.body.id).to.not.be.empty;
-        character = res.body;
+  describe('POST /api/dead', function() {
+    it('should save body', function (done) {
+      request.post('/api/dead')
+        .send({ name: 'Robert Baratheon', dead: 'yes' })
+        .expect(200)
+        .expect(res => {
+          expect(res.body.name).to.equal('Robert Baratheon');
+          expect(res.body.dead).to.equal('yes');
+          expect(res.body.id).to.not.be.empty;
+          character = res.body;
+        })
+        .end(done);
+    });
+  });
+  describe('DELETE /api/dead', function() {
+    it('should delete a thing', function (done){
+      request.delete(`/api/dead?id=${character.id}`)
+      .expect(res =>{
+        expect(res.status).to.equal(204);
       })
       .end(done);
-  });
-});
-describe('DELETE /api/dead', function() {
-  var character = [{id:'3333333'}];
-  it('should delete a thing', function (done){
-    request.delete(`/api/dead?id=${character.id}`)
-    .expect(res =>{
-      expect(res.status).to.equal(204);
-    })
-    .end(done);
+    });
   });
 });
