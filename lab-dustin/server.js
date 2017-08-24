@@ -17,14 +17,26 @@ router.get('/', function(req,res){
 const storage = {};
 
 router.post('/note',(req,res) => {
-  let note = Object.assign({
-    id: uuid.v1(),
-  },req.body);
-  storage[note.id] = note;
-  console.log('note ',note);
-  res.writeHead(200,{'content-type': 'application/json'});
-  res.write(JSON.stringify(note));
-  res.end();
+  if (!req.body) {
+    res.writeHead(400);
+    res.write('Bad Request: No Body');
+    return res.end();
+  }
+  try {
+    let note = Object.assign({
+      id: uuid.v1(),
+    },req.body);
+    storage[note.id] = note;
+    console.log('note ',note);
+    res.writeHead(200,{'content-type': 'application/json'});
+    res.write(JSON.stringify(note));
+    res.end();
+  }
+  catch (err) {
+    res.writeHead(400);
+    res.write('Bad Request');
+    res.end();
+  }
 });
 
 router.get('/note',(req,res) => {

@@ -38,18 +38,21 @@ describe('Simple Resource',function(){
 
   describe('POST /note',function(){
     it('should save the body',function(done){
-      request
-        .post('/note')
+      request.post('/note')
         .send({note: 'this is a note'})
         .expect(200)
         .expect(res => {
           expect(res.body.note).to.equal('this is a note');
           expect(res.body.id).to.not.be.empty;
           note = res.body;
-          console.log('full note: ',note);
         })
         .end(done);
-
+    });
+    it('should return bad request if there was no body or if the request was invalid',function(done){
+      request.post('/note')
+        .expect(400)
+        .expect('Bad Request: No Body')
+        .end(done);
     });
   });
 
@@ -73,6 +76,7 @@ describe('Simple Resource',function(){
     });
 
     it('should return the note if the id is valid',function(done){
+      console.log(note);
       request
         .get(`/note?id=${note.id}`)
         .expect(200)
