@@ -17,15 +17,22 @@ exports.createItem = function(schemaName, item) {
 exports.fetchItem = function(schemaName, id) {
   return new Promise((resolve, reject) => {
     if (!schemaName) return reject(new Error('expected schema name'));
-    if (!id) return reject(new Error('expected id'));
 
     var schema = storage[schemaName];
     if (!schema) return reject(new Error('schema not found'));
 
-    var item = schema[id];
-    if (!item) return reject(new Error('item not found'));
-
-    resolve(item);
+    if (!id){
+      var idArray = [];
+      for (var x in schema){
+        idArray.push(x.id);
+      }
+      resolve({ids: idArray});
+    }
+    else{
+      var item = schema[id];
+      if (!item) return reject(new Error('item not found'));
+      resolve(item);
+    }
   });
 };
 

@@ -44,6 +44,7 @@ router.post('/note', (req,res) =>{
 });
 
 router.get('/note', (req, res) =>{
+  console.log(req.url.pathname, req.url.query.id);
   storage.fetchItem(req.url.pathname, req.url.query.id)
   .then((item) => {
     res.writeHead(200, {
@@ -53,6 +54,7 @@ router.get('/note', (req, res) =>{
     res.end();
   })
   .catch(err =>{
+    console.log(err);
     res.writeHead(400, {
       'Content-Type': 'text/plain'
     });

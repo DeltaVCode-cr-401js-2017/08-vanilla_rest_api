@@ -84,11 +84,12 @@ describe('Simple Resource', function (){
   });
 
   describe('GET /note', function (){
-    it('should return array if no ID sent', function (done){
+    it('should return array of IDs in body if no ID sent', function (done){
       request.get(`/note`)
       .expect(200)
       .expect(res => {
-        expect(res.body.note).to.be.a('array');
+        expect(res.body.ids).to.be.a('array');
+        expect(res.body.ids).to.not.be.empty;
       })
       .end(done);
     });
