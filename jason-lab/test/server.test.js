@@ -3,8 +3,6 @@ const app = require('../server');
 const request = require('supertest')(app);
 
 
-
-
 describe('ROUTES', function (){
   it('should return routed', function (done){
     request.get('/')
@@ -35,5 +33,15 @@ describe('POST /api/dead', function() {
         character = res.body;
       })
       .end(done);
+  });
+});
+describe('DELETE /api/dead', function() {
+  var character = [{id:'3333333'}];
+  it('should delete a thing', function (done){
+    request.delete(`/api/dead?id=${character.id}`)
+    .expect(res =>{
+      expect(res.status).to.equal(204);
+    })
+    .end(done);
   });
 });
