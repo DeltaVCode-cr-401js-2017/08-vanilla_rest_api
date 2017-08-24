@@ -62,6 +62,14 @@ describe('Simple Resource', function (){
       .expect('content-type', 'text/plain')
       .end(done);
     });
+    it('should return bad request if body is not valid JSON', function (done){
+      request.post('/note')
+      .send('I am not JSON')
+      .expect(400)
+      .expect('Bad Request : Error: expected item')
+      .expect('content-type', 'text/plain')
+      .end(done);
+    });
     it('should save body', function (done){
       request.post('/note')
       .send({note: 'this is a note'})
