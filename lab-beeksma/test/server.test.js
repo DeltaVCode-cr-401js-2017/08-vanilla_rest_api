@@ -102,4 +102,23 @@ describe('Simple Resource', function (){
       .end(done);
     });
   });
+
+  describe('DELETE /note', function (){
+    it('should return bad request if no ID sent', function (done){
+      request.get(`/note`)
+      .expect(400)
+      .expect('Bad Request : Error: expected id')
+      .expect('content-type', 'text/plain')
+      .end(done);
+    });
+
+    it('should return a 204 status with nothing in body if ID supplied', function (done){
+      request.get(`/note?id=${note.id}`)
+      .expect(204)
+      .expect(res => {
+        expect(res.body).to.be.null;
+      })
+      .end(done);
+    });
+  });
 });
