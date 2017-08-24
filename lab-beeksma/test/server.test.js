@@ -55,6 +55,13 @@ describe('Simple Resource', function (){
   var note = null;
 
   describe('POST /note', function() {
+    it('should return bad request if no body', function (done){
+      request.post('/note')
+      .expect(400)
+      .expect('Bad Request : Error: expected item')
+      .expect('content-type', 'text/plain')
+      .end(done);
+    });
     it('should save body', function (done){
       request.post('/note')
       .send({note: 'this is a note'})
@@ -67,6 +74,7 @@ describe('Simple Resource', function (){
       .end(done);
     });
   });
+
   describe('GET /note', function (){
     it('should return bad request if no ID sent', function (done){
       request.get(`/note`)
