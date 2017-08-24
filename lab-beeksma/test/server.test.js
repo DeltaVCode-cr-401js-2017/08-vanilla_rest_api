@@ -71,7 +71,7 @@ describe('Simple Resource', function (){
     it('should return bad request if no ID sent', function (done){
       request.get(`/note`)
       .expect(400)
-      .expect('Bad Request')
+      .expect('Bad Request : Error: expected id')
       .expect('content-type', 'text/plain')
       .end(done);
     });

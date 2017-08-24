@@ -34,25 +34,21 @@ router.post('/note', (req,res) =>{
 });
 
 router.get('/note', (req, res) =>{
-  if(!req.url.query.id){
-    res.writeHead(400, {
-      'Content-Type': 'text/plain'
-    });
-    res.write('Bad Request');
-    res.end();
-  }
-  var note = storage[req.url.query.id];
-  if (note) {
+  storage.fetchItem(req.url.pathname, req.url.query.id)
+  .then((item) => {
     res.writeHead(200, {
       'Content-Type': 'application/json'
     });
-    res.write(JSON.stringify(note));
+    res.write(JSON.stringify(item));
     res.end();
-  }
-  else{
-    //404
+  })
+  .catch(err =>{
+    res.writeHead(400, {
+      'Content-Type': 'text/plain'
+    });
+    res.write(`Bad Request : ${err}`);
     res.end();
-  }
+  });
 });
 
 const server = http.createServer(router.route());
