@@ -35,7 +35,10 @@ router.post('/note', (req,res) =>{
 
 router.get('/note', (req, res) =>{
   if(!req.url.query.id){
-    //bad request
+    res.writeHead(400, {
+      'Content-Type': 'text/plain'
+    });
+    res.write('Bad Request');
     res.end();
   }
   var note = storage[req.url.query.id];
