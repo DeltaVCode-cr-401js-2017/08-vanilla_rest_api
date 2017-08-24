@@ -4,15 +4,9 @@ const http = require('http');
 const PORT = process.env.port || 3000;
 const storage = require('./lib/storage.js');
 const Router = require('./lib/router.js');
+
 const DeadCharacter = require('./model/simple-resource.js');
 const router = new Router();
-
-
-if (!module.parent){
-  server.listen(PORT, () =>{
-    console.log(`HTTP listening on ${PORT}`);
-  });
-}
 
 router.get('/', (req, res) =>{
   res.writeHead(200, {
@@ -24,7 +18,7 @@ router.get('/', (req, res) =>{
 
 router.get('/api/dead', function(req, res) {
   if(req.url.query.id) {
-    storage.fetchItem('dead', req.url.query.id)
+    storage.fetchItem('character', req.url.query.id)
     .then(dead => {
       res.writeHead(200, {
         'Content-Type': 'application/json'
@@ -48,14 +42,32 @@ router.get('/api/dead', function(req, res) {
   res.end();
 });
 
-router.post('/api/dead', (req, res) =>{
-  res.writeHead(200, {
-    'Content-Type':'application/json'
-  });
-  res.write(JSON.stringify(req.body));
-  res.end();
+router.post('/api/dead', function(req, res){
+  try{
+    var character = new DeadCharacter(req.body.name, req.body.dead);
+    console.log(character);
+    storage.createItem('character', character);
+    res.writeHead(200, {
+      'Content-Type': 'application/json'
+    });
+    res.write(JSON.stringify(character));
+    res.end();
+  } catch(err) {
+    console.error('server post', err);
+    res.writeHead(400, {
+      'Content-Type': 'plain/text'
+    });
+    res.write('bad request');
+    res.end();
+  }
 });
 
-
 const server = http.createServer(router.route());
+
+if (!module.parent){
+  server.listen(PORT, () =>{
+    console.log(`HTTP listening on ${PORT}`);
+  });
+}
+
 module.exports = server;

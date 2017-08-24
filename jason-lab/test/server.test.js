@@ -1,6 +1,8 @@
-//const { expect } = require('chai');
+const { expect } = require('chai');
 const app = require('../server');
 const request = require('supertest')(app);
+
+
 
 
 describe('ROUTES', function (){
@@ -19,14 +21,19 @@ describe('ROUTES', function (){
       .end(done);
   });
 });
-describe('ROUTES', function (){
-  describe('POST /note', function (){
-    it('should save body', function (done){
-      request.post('/note')
-      .send({ note: 'this is a note'})
+
+describe('POST /api/dead', function() {
+  var character = null;
+  it('should save body', function (done) {
+    request.post('/api/dead')
+      .send({ name: 'Robert Baratheon', dead: 'yes' })
       .expect(200)
-      .expect({ note: 'this is a note'})
+      .expect(res => {
+        expect(res.body.name).to.equal('Robert Baratheon');
+        expect(res.body.dead).to.equal('yes');
+        expect(res.body.id).to.not.be.empty;
+        character = res.body;
+      })
       .end(done);
-    });
   });
 });
