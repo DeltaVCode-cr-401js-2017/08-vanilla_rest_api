@@ -37,7 +37,7 @@ router.get('/note',(req,res) => {
   }
   if(note){
     res.writeHead(200,
-    {'content-type': 'application/json'});
+      {'content-type': 'application/json'});
     res.write(JSON.stringify(note));
     return res.end();
   }

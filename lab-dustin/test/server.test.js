@@ -6,12 +6,11 @@ const { expect } = require('chai');
 
 describe('GET /', function(){
   it('should return routed', function(done){
-    request
-      .get('/')
-        .expect(200)
-        .expect('Routed')
-        .expect('content-type', 'text/plain')
-        .end(done);
+    request.get('/')
+      .expect(200)
+      .expect('Routed')
+      .expect('content-type', 'text/plain')
+      .end(done);
   });
 
   it('should return not found for missing path', function(done){
@@ -83,8 +82,7 @@ describe('Simple Resource',function(){
     });
     it('should return the note if the id is valid',function(done){
       console.log(note);
-      request
-        .get(`/note?id=${note.id}`)
+      request.get(`/note?id=${note.id}`)
         .expect(200)
         .expect(res => {
           expect(res.body.note).to.equal(note.note);
@@ -97,8 +95,8 @@ describe('Simple Resource',function(){
   describe('DELETE /note',function(){
     it('should return 204 OK if it deleted the note',function(done){
       request.delete(`/note?id=${note.id}`)
-      .expect(204)
-      .end(done);
+        .expect(204)
+        .end(done);
     });
   });
 });
