@@ -34,6 +34,21 @@ describe('Routes', function (){
     .end(done);
   });
 
+  it('should return Not Found for PUT missing path', function (done){
+    request.put('/404')
+    .expect(404)
+    .expect('Not Found')
+    .expect('content-type', 'text/plain')
+    .end(done);
+  });
+
+  it('should return Not Found for DELETE missing path', function (done){
+    request.delete('/404')
+    .expect(404)
+    .expect('Not Found')
+    .expect('content-type', 'text/plain')
+    .end(done);
+  });
 });
 
 describe('Simple Resource', function (){

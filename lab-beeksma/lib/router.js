@@ -18,7 +18,6 @@ Router.prototype.post = function(path, callback){
   this.routes.POST[path] = callback;
 };
 
-
 Router.prototype.route = function(){
   console.log(this.routes);
 
