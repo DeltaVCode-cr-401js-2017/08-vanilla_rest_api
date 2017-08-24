@@ -34,6 +34,8 @@ describe('GET /', function(){
 });
 
 describe('Simple Resource',function(){
+  var note = null;
+
   describe('POST /note',function(){
     it('should save the body',function(done){
       request
@@ -43,36 +45,42 @@ describe('Simple Resource',function(){
         .expect(res => {
           expect(res.body.note).to.equal('this is a note');
           expect(res.body.id).to.not.be.empty;
+          note = res.body;
+          console.log('full note: ',note);
         })
         .end(done);
+
     });
   });
+
   describe('GET /note', function(){
     it('should return a bad request when not given an id in url query',function(done){
       request
         .get('/note')
         .expect(400)
-        .expect({'content-type': 'text/plain'})
-        .expect('Bad Request');
-      done();
+        .expect('content-type', 'text/plain')
+        .expect('Bad Request')
+        .end(done);
     });
 
     it('should return not found if the note does not exist',function(done){
       request
         .get('/note?id=1')
         .expect(404)
-        .expect({'content-type': 'text/plain'})
-        .expect('Not Found');
-      done();
+        .expect('content-type', 'text/plain')
+        .expect('Not Found')
+        .end(done);
     });
 
     it('should return the note if the id is valid',function(done){
       request
-        .get('/note?id=2')
+        .get(`/note?id=${note.id}`)
         .expect(200)
-        .expect({'content-type': 'text/plain'})
-        .expect('OK');
-      done();
+        .expect(res => {
+          expect(res.body.note).to.equal(note.note);
+          expect(res.body.id).to.equal(note.id);
+        })
+        .end(done);
     });
   });
 

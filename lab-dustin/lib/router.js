@@ -17,6 +17,7 @@ Router.prototype.post = function(path,callback){
   this.routes.POST[path] = callback;
 };
 
+
 Router.prototype.route = function(){
   console.log('routes: ',this.routes);
 
@@ -31,9 +32,13 @@ Router.prototype.route = function(){
       console.log(methodRoutes);
       if (!methodRoutes) throw new Error(`I don't speak ${req.method}`);
 
+      console.log('pathname ',req.url.pathname);
+
       let pathCallback = methodRoutes[req.url.pathname];
       console.log(pathCallback);
-      if (pathCallback) return pathCallback(req,res);
+      if (typeof pathCallback === 'function') {
+        return pathCallback(req, res);
+      }
 
       res.writeHead(
         404,

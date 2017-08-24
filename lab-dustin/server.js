@@ -24,14 +24,15 @@ router.post('/note',(req,res) => {
   console.log('note ',note);
   res.writeHead(200,{'content-type': 'application/json'});
   res.write(JSON.stringify(note));
-  //storage.createItem()
   res.end();
 });
 
 router.get('/note',(req,res) => {
-  //storage.fetchItem();
-  console.log(storage[req.url.query.id]);
+  console.log(req.url.query.id);
+  var note = storage[req.url.query.id];
+
   if (!req.url.query.id){
+    console.log(req.url.query.id);
     res.writeHead(400,
       {'content-type': 'text/plain'});
     res.write('Bad Request');
@@ -43,7 +44,13 @@ router.get('/note',(req,res) => {
       {'content-type': 'text/plain'}
     );
     res.write('Not Found');
-    res.end();
+    return res.end();
+  }
+  if(note){
+    res.writeHead(200,
+    {'content-type': 'application/json'});
+    res.write(JSON.stringify(note));
+    return res.end();
   }
 });
 
