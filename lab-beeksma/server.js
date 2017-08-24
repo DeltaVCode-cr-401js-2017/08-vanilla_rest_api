@@ -6,8 +6,7 @@ const uuid = require('uuid');
 
 const Router = require('./lib/router');
 const router = new Router();
-
-var storage = {};
+const storage = require('./model/storage.js');
 
 router.get('/', function(req,res){
   console.log(req.method, req.url.href);
@@ -23,13 +22,15 @@ router.post('/note', (req,res) =>{
   let note = Object.assign ({
     id: uuid.v1(),
   }, req.body);
-  storage[note.id] = note;
-  console.log(note);
-  res.writeHead(200, {
-    'Content-Type': 'application/json'
-  });
-  res.write(JSON.stringify(note));
-  res.end();
+  storage.createItem(req.url.pathname, note)
+    .then((item) => {
+      console.log(item);
+      res.writeHead(200, {
+        'Content-Type': 'application/json'
+      });
+      res.write(JSON.stringify(item));
+      res.end();
+    });
 });
 
 router.get('/note', (req, res) =>{
