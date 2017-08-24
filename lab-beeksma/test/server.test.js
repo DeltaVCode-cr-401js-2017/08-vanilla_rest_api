@@ -68,7 +68,15 @@ describe('Simple Resource', function (){
     });
   });
   describe('GET /note', function (){
-    it('should return a note', function (done){
+    it('should return bad request if no ID sent', function (done){
+      request.get(`/note`)
+      .expect(400)
+      .expect('Bad Request')
+      .expect('content-type', 'text/plain')
+      .end(done);
+    });
+
+    it('should return a note if ID supplied', function (done){
       request.get(`/note?id=${note.id}`)
       .expect(200)
       .expect(res => {
