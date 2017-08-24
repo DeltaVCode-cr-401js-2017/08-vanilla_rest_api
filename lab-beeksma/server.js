@@ -46,38 +46,38 @@ router.post('/note', (req,res) =>{
 router.get('/note', (req, res) =>{
   console.log(req.url.pathname, req.url.query.id);
   storage.fetchItem(req.url.pathname, req.url.query.id)
-  .then((item) => {
-    res.writeHead(200, {
-      'Content-Type': 'application/json'
+    .then((item) => {
+      res.writeHead(200, {
+        'Content-Type': 'application/json'
+      });
+      res.write(JSON.stringify(item));
+      res.end();
+    })
+    .catch(err =>{
+      console.log(err);
+      res.writeHead(400, {
+        'Content-Type': 'text/plain'
+      });
+      res.write(`Bad Request : ${err}`);
+      res.end();
     });
-    res.write(JSON.stringify(item));
-    res.end();
-  })
-  .catch(err =>{
-    console.log(err);
-    res.writeHead(400, {
-      'Content-Type': 'text/plain'
-    });
-    res.write(`Bad Request : ${err}`);
-    res.end();
-  });
 });
 
 router.delete('/note', (req, res) =>{
   storage.removeItem(req.url.pathname, req.url.query.id)
-  .then(() => {
-    res.writeHead(204, {
-      'Content-Type': 'text/plain'
+    .then(() => {
+      res.writeHead(204, {
+        'Content-Type': 'text/plain'
+      });
+      res.end();
+    })
+    .catch(err =>{
+      res.writeHead(400, {
+        'Content-Type': 'text/plain'
+      });
+      res.write(`Bad Request : ${err}`);
+      res.end();
     });
-    res.end();
-  })
-  .catch(err =>{
-    res.writeHead(400, {
-      'Content-Type': 'text/plain'
-    });
-    res.write(`Bad Request : ${err}`);
-    res.end();
-  });
 });
 
 const server = http.createServer(router.route());

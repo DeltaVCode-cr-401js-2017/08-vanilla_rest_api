@@ -37,32 +37,32 @@ Router.prototype.route = function(){
       parseURL(req)
       ,parseJSON(req)
     ])
-    .then(() =>{
-      console.log(req.method, req.url.href);
+      .then(() =>{
+        console.log(req.method, req.url.href);
 
-      let methodRoutes = this.routes[req.method];
-      if(!methodRoutes) throw new Error(`I don't speak ${req.method}`);
-      let pathCallback = methodRoutes[req.url.pathname];
-      if(typeof pathCallback === 'function') {
-        return pathCallback(req,res);
-      }
+        let methodRoutes = this.routes[req.method];
+        if(!methodRoutes) throw new Error(`I don't speak ${req.method}`);
+        let pathCallback = methodRoutes[req.url.pathname];
+        if(typeof pathCallback === 'function') {
+          return pathCallback(req,res);
+        }
 
-      console.log(pathCallback);
+        console.log(pathCallback);
 
-      res.writeHead(404, {
-        'Content-Type': 'text/plain'
+        res.writeHead(404, {
+          'Content-Type': 'text/plain'
+        });
+        res.write('Not Found');
+        res.end();
+      })
+      .catch(err => {
+        console.error(err);
+        res.writeHead(400, {
+          'Content-Type': 'text/plain'
+        });
+        res.write(err.message);
+        res.end();
       });
-      res.write('Not Found');
-      res.end();
-    })
-    .catch(err => {
-      console.error(err);
-      res.writeHead(400, {
-        'Content-Type': 'text/plain'
-      });
-      res.write(err.message);
-      res.end();
-    });
 
   };
 };
