@@ -84,11 +84,12 @@ describe('Simple Resource', function (){
   });
 
   describe('GET /note', function (){
-    it('should return bad request if no ID sent', function (done){
+    it('should return array if no ID sent', function (done){
       request.get(`/note`)
-      .expect(400)
-      .expect('Bad Request : Error: expected id')
-      .expect('content-type', 'text/plain')
+      .expect(200)
+      .expect(res => {
+        expect(res.body.note).to.be.a('array');
+      })
       .end(done);
     });
 
